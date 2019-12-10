@@ -1,4 +1,4 @@
-# wtgen
+# NONMQL
 
 ## Project setup
 ```
