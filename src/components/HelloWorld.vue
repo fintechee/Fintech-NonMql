@@ -42,6 +42,12 @@
                           v-model="indicator"
                           :rules="indicatorRules"
                         ></v-select>
+                        <v-select
+                          :items="templates"
+                          label="Template"
+                          v-model="template"
+                          :rules="templateRules"
+                        ></v-select>
 
                         <v-btn text @click="clearForm()">Reset</v-btn>
                         <v-btn color="warning" dark @click="generateSourceCode()">Generate</v-btn>
@@ -70,6 +76,7 @@ export default {
             instrument: 'EUR/USD',
             timeFrame: 'TIME_FRAME.M1',
             indicator: 'sma',
+            template: '1',
             brokerRules: [
                 v => typeof v == 'undefined' || v == null || v == '' || v.length <= 20 || 'Too many characters.(Limit: 20 characters)'
             ],
@@ -84,6 +91,9 @@ export default {
             ],
             indicatorRules: [
                 v => v != '' || 'Indicator is required'
+            ],
+            templateRules: [
+                v => v != '' || 'Template is required'
             ],
 
             sourceCode: '',
@@ -122,10 +132,77 @@ export default {
             indicatorNames: [{
                 text: 'Simple Moving Average',
                 value: 'sma'
+            }, {
+                text: 'Relative Strength Index',
+                value: 'rsi'
             }],
             indicatorMap: [],
+            templates: [{
+                text: 'Close Price vs Indicator',
+                value: '1'
+            }, {
+                text: 'Indicator vs Constant Number',
+                value: '2'
+            }],
+            templateMap: [],
+}),
 
-            template1:
+    components: {
+        editor: require('vue2-ace-editor'),
+    },
+    created() {
+        this.init();
+    },
+
+    methods: {
+        init() {
+            this.indicatorMap['sma'] = {
+                name: 'sma',
+                parameters:
+                '   [{ // parameters\n' +
+                '       name: "period",\n' +
+                '       value: 20,\n' +
+                '       required: true,\n' +
+                '       type: PARAMETER_TYPE.INTEGER,\n' +
+                '       range: [1, 100]\n' +
+                '   }],\n',
+                getParameters:
+                '       var period = getEAParameter(context, "period")\n',
+                setParameters:
+                '       [{\n' +
+                '           name: "period",\n' +
+                '           value: period\n' +
+                '       }])\n',
+            }
+
+            this.indicatorMap['rsi'] = {
+                name: 'rsi',
+                parameters:
+                '   [{ // parameters\n' +
+                '       name: "period",\n' +
+                '       value: 14,\n' +
+                '       required: true,\n' +
+                '       type: PARAMETER_TYPE.INTEGER,\n' +
+                '       range: [1, 100]\n' +
+                '   }, { // parameters\n' +
+                '       name: "constant",\n' +
+                '       value: 20,\n' +
+                '       required: true,\n' +
+                '       type: PARAMETER_TYPE.INTEGER,\n' +
+                '       range: [1, 100]\n' +
+                '   }],\n',
+                getParameters:
+                '       var period = getEAParameter(context, "period")\n' +
+                '       var constantNum = getEAParameter(context, "constant")\n',
+                setParameters:
+                '       [{\n' +
+                '           name: "period",\n' +
+                '           value: period\n' +
+                '       }])\n',
+            }
+
+            this.templateMap['1'] = {
+                sourceCode:
     'registerEA(\n' +
     '   "sample_using_[indicator]",\n' +
     '   "A test EA based on [indicator]",\n' +
@@ -171,35 +248,58 @@ export default {
     '       }\n' +
     '    }\n' +
     ')\n'
-}),
-
-    components: {
-        editor: require('vue2-ace-editor'),
-    },
-    created() {
-        this.init();
-    },
-
-    methods: {
-        init() {
-            this.indicatorMap['sma'] = {
-                name: 'sma',
-                parameters:
-                '   [{ // parameters\n' +
-                '       name: "period",\n' +
-                '       value: 20,\n' +
-                '       required: true,\n' +
-                '       type: PARAMETER_TYPE.INTEGER,\n' +
-                '       range: [1, 100]\n' +
-                '   }],\n',
-                getParameters:
-                '       var period = getEAParameter(context, "period")\n',
-                setParameters:
-                '       [{\n' +
-                '           name: "period",\n' +
-                '           value: period\n' +
-                '       }])\n',
             }
+
+            this.templateMap['2'] = {
+                sourceCode:
+    'registerEA(\n' +
+    '   "sample_using_[indicator]",\n' +
+    '   "A test EA based on [indicator]",\n' +
+        '[parameters]' +
+    '   function (context) { // Init()\n' +
+    '       var account = getAccount(context, 0)\n' +
+    '       var brokerName = [broker]\n' +
+    '       var accountId = [account]\n' +
+    '       var symbolName = [instrument]\n' +
+    '       getQuotes(context, brokerName, accountId, symbolName)\n' +
+    '       window.chartHandle = getChartHandle(context, brokerName, accountId, symbolName, [timeFrame])\n' +
+            '[getParameters]' +
+    '       window.indiHandle = getIndicatorHandle(context, brokerName, accountId, symbolName, [timeFrame], "[indicator]",\n' +
+            '[setParameters]' +
+    '   },\n' +
+    '   function(context) { // Deinit()\n' +
+    '       delete window.currTime\n' +
+    '   },\n' +
+    '   function(context) { // OnTick()\n' +
+    '       var arrTime = getData(context, window.chartHandle, DATA_NAME.TIME)\n' +
+    '       if (typeof window.currTime == "undefined") {\n' +
+    '           window.currTime = arrTime[arrTime.length - 1]\n' +
+    '       } else if (window.currTime != arrTime[arrTime.length - 1]) {\n' +
+    '           window.currTime = arrTime[arrTime.length - 1]\n' +
+    '       } else {\n' +
+    '           return\n' +
+    '       }\n' +
+    '       var account = getAccount(context, 0)\n' +
+    '       var brokerName = [account]\n' +
+    '       var accountId = [account]\n' +
+    '       var symbolName = [instrument]\n' +
+    '       var arrClose = getData(context, window.chartHandle, DATA_NAME.CLOSE)\n' +
+    '       var arrIndi = getData(context, window.indiHandle, "[indicator]")\n' +
+            '[getParameters]' +
+    '       var ask = getAsk(context, brokerName, accountId, symbolName)\n' +
+    '       var bid = getBid(context, brokerName, accountId, symbolName)\n' +
+    '       var limitPrice = 0.0003\n' +
+    '       var stopPrice = 0.0003\n' +
+    '       var volume = 0.01\n' +
+    '       if (constantNum < arrIndi[arrIndi.length - 3] && constantNum > arrIndi[arrIndi.length - 2]) {\n' +
+    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_BUYLIMIT, ask - limitPrice, 0, volume, ask + limitPrice, bid - 3 * stopPrice, "")\n' +
+    '       } else if ((100 - constantNum) > arrIndi[arrIndi.length - 3] && (100 - constantNum) < arrIndi[arrIndi.length - 2]) {\n' +
+    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_SELLLIMIT, bid + limitPrice, 0, volume, bid - limitPrice, ask + 3 * stopPrice, "")\n' +
+    '       }\n' +
+    '    }\n' +
+    ')\n'
+            }
+
         },
         clearForm() {
             this.broker = null;
@@ -208,6 +308,7 @@ export default {
             this.instrument = 'EUR/USD';
             this.timeFrame = 'TIME_FRAME.M1';
             this.indicator = 'sma';
+            this.template = '1';
         },
         editorInit() {
             require('brace/ext/language_tools') //language extension prerequsite...
@@ -223,8 +324,9 @@ export default {
             let instrument = '"' + this.instrument + '"';
             let timeFrame = this.timeFrame;
             let indicator = this.indicatorMap[this.indicator];
+            let sourceCode = this.templateMap[this.template].sourceCode;
 
-            this.sourceCode = this.template1
+            this.sourceCode = sourceCode
                 .replace(/\[broker\]/g, broker)
                 .replace(/\[account\]/g, account)
                 .replace(/\[instrument\]/g, instrument)
