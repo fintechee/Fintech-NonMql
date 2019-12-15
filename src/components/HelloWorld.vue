@@ -47,7 +47,14 @@
                           label="Template"
                           v-model="template"
                           :rules="templateRules"
+                          @change="changeTemplate"
                         ></v-select>
+                        <v-img
+                          :src="featuredPic"
+                          height="195"
+                          v-if="featuredPic"
+                          style="margin-bottom:10px"
+                        ></v-img>
 
                         <v-btn text @click="clearForm()">Reset</v-btn>
                         <v-btn color="warning" dark @click="generateSourceCode()">Generate</v-btn>
@@ -77,6 +84,7 @@ export default {
             timeFrame: 'TIME_FRAME.M1',
             indicator: 'sma',
             template: '1',
+            featuredPic: '/images/template1.png',
             brokerRules: [
                 v => typeof v == 'undefined' || v == null || v == '' || v.length <= 20 || 'Too many characters.(Limit: 20 characters)'
             ],
@@ -139,7 +147,7 @@ export default {
             indicatorMap: [],
             templates: [{
                 text: 'Close Price vs Indicator',
-                value: '1'
+                value: '1',
             }, {
                 text: 'Indicator vs Constant Number',
                 value: '2'
@@ -202,6 +210,7 @@ export default {
             }
 
             this.templateMap['1'] = {
+                featuredPic: '/images/template1.png',
                 sourceCode:
     'registerEA(\n' +
     '   "sample_using_[indicator]",\n' +
@@ -251,6 +260,7 @@ export default {
             }
 
             this.templateMap['2'] = {
+                featuredPic: '/images/template2.png',
                 sourceCode:
     'registerEA(\n' +
     '   "sample_using_[indicator]",\n' +
@@ -309,6 +319,7 @@ export default {
             this.timeFrame = 'TIME_FRAME.M1';
             this.indicator = 'sma';
             this.template = '1';
+            this.featuredPic = '/images/template1.png';
         },
         editorInit() {
             require('brace/ext/language_tools') //language extension prerequsite...
@@ -317,6 +328,9 @@ export default {
             require('brace/mode/less')
             require('brace/theme/chrome')
             require('brace/snippets/javascript') //snippet
+        },
+        changeTemplate(v) {
+            this.featuredPic = this.templateMap[v].featuredPic;
         },
         generateSourceCode() {
             let broker = !this.broker ? 'getBrokerNameOfAccount(account)' : '"' + this.broker + '"';
