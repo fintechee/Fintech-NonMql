@@ -10,7 +10,7 @@
 
         <v-spacer></v-spacer>
 
-        <v-btn href="https://www.fintechee.com" target="_blank" text>
+        <v-btn href="https://github.com/fintechee/nonmql" target="_blank" text>
             <span class="mr-2">
                 Github
             </span>
