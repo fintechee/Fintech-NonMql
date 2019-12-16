@@ -151,6 +151,9 @@ export default {
             }, {
                 text: 'Indicator vs Constant Number',
                 value: '2'
+            }, {
+                text: 'Main vs Signal',
+                value: '3'
             }],
             templateMap: [],
 }),
@@ -233,8 +236,8 @@ export default {
                 '   }],\n',
                 getParameters:
                 '       var fasteEMA = getEAParameter(context, "fasteEMA")\n' +
-                '       var slowEMA = getEAParameter(context, "slowEMA")\n',
-                '       var signalSMA = getEAParameter(context, "signalSMA")\n' +
+                '       var slowEMA = getEAParameter(context, "slowEMA")\n' +
+                '       var signalSMA = getEAParameter(context, "signalSMA")\n',
                 setParameters:
                 '       [{\n' +
                 '           name: "fasteEMA",\n' +
