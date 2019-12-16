@@ -141,8 +141,20 @@ export default {
                 text: 'Simple Moving Average',
                 value: 'sma'
             }, {
+                text: 'Exponential Moving Average',
+                value: 'ema'
+            }, {
+                text: 'Smoothed Moving Average',
+                value: 'smma'
+            }, {
+                text: 'Linear weighted Moving Average',
+                value: 'lwma'
+            }, {
                 text: 'Relative Strength Index',
                 value: 'rsi'
+            }, {
+                text: 'MACD',
+                value: 'macd'
             }],
             indicatorMap: [],
             templates: [{
@@ -169,6 +181,63 @@ export default {
         init() {
             this.indicatorMap['sma'] = {
                 name: 'sma',
+                parameters:
+                '   [{ // parameters\n' +
+                '       name: "period",\n' +
+                '       value: 20,\n' +
+                '       required: true,\n' +
+                '       type: PARAMETER_TYPE.INTEGER,\n' +
+                '       range: [1, 100]\n' +
+                '   }],\n',
+                getParameters:
+                '       var period = getEAParameter(context, "period")\n',
+                setParameters:
+                '       [{\n' +
+                '           name: "period",\n' +
+                '           value: period\n' +
+                '       }])\n',
+            }
+
+            this.indicatorMap['ema'] = {
+                name: 'ema',
+                parameters:
+                '   [{ // parameters\n' +
+                '       name: "period",\n' +
+                '       value: 20,\n' +
+                '       required: true,\n' +
+                '       type: PARAMETER_TYPE.INTEGER,\n' +
+                '       range: [1, 100]\n' +
+                '   }],\n',
+                getParameters:
+                '       var period = getEAParameter(context, "period")\n',
+                setParameters:
+                '       [{\n' +
+                '           name: "period",\n' +
+                '           value: period\n' +
+                '       }])\n',
+            }
+
+            this.indicatorMap['smma'] = {
+                name: 'smma',
+                parameters:
+                '   [{ // parameters\n' +
+                '       name: "period",\n' +
+                '       value: 20,\n' +
+                '       required: true,\n' +
+                '       type: PARAMETER_TYPE.INTEGER,\n' +
+                '       range: [1, 100]\n' +
+                '   }],\n',
+                getParameters:
+                '       var period = getEAParameter(context, "period")\n',
+                setParameters:
+                '       [{\n' +
+                '           name: "period",\n' +
+                '           value: period\n' +
+                '       }])\n',
+            }
+
+            this.indicatorMap['lwma'] = {
+                name: 'lwma',
                 parameters:
                 '   [{ // parameters\n' +
                 '       name: "period",\n' +
