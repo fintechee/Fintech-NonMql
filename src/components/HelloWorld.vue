@@ -155,6 +155,9 @@ export default {
             }, {
                 text: 'MACD',
                 value: 'macd'
+            }, {
+                text: 'Non-Indicator',
+                value: 'nonindicator'
             }],
             indicatorMap: [],
             templates: [{
@@ -166,6 +169,9 @@ export default {
             }, {
                 text: 'Main vs Signal',
                 value: '3'
+            }, {
+                text: 'Candlesticks with the Same Color',
+                value: '4'
             }],
             templateMap: [],
 }),
@@ -264,7 +270,7 @@ export default {
                 '       required: true,\n' +
                 '       type: PARAMETER_TYPE.INTEGER,\n' +
                 '       range: [1, 100]\n' +
-                '   }, { // parameters\n' +
+                '   }, {\n' +
                 '       name: "constant",\n' +
                 '       value: 20,\n' +
                 '       required: true,\n' +
@@ -290,13 +296,13 @@ export default {
                 '       required: true,\n' +
                 '       type: PARAMETER_TYPE.INTEGER,\n' +
                 '       range: [1, 100]\n' +
-                '   }, { // parameters\n' +
+                '   }, {\n' +
                 '       name: "slowEMA",\n' +
                 '       value: 26,\n' +
                 '       required: true,\n' +
                 '       type: PARAMETER_TYPE.INTEGER,\n' +
                 '       range: [1, 100]\n' +
-                '   }, { // parameters\n' +
+                '   }, {\n' +
                 '       name: "signalSMA",\n' +
                 '       value: 9,\n' +
                 '       required: true,\n' +
@@ -318,6 +324,20 @@ export default {
                 '           name: "signalSMA",\n' +
                 '           value: signalSMA\n' +
                 '       }])\n',
+            }
+
+            this.indicatorMap['nonindicator'] = {
+                name: 'nonindicator',
+                parameters:
+                '   [{ // parameters\n' +
+                '       name: "period",\n' +
+                '       value: 3,\n' +
+                '       required: true,\n' +
+                '       type: PARAMETER_TYPE.INTEGER,\n' +
+                '       range: [1, 100]\n' +
+                '   }],\n',
+                getParameters:
+                '       var period = getEAParameter(context, "period")\n',
             }
 
             this.templateMap['1'] = {
@@ -454,7 +474,6 @@ export default {
     '       var brokerName = [account]\n' +
     '       var accountId = [account]\n' +
     '       var symbolName = [instrument]\n' +
-    '       var arrClose = getData(context, window.chartHandle, DATA_NAME.CLOSE)\n' +
     '       var arrMain = getData(context, window.indiHandle, "main")\n' +
     '       var arrSignal = getData(context, window.indiHandle, "signal")\n' +
     '       var ask = getAsk(context, brokerName, accountId, symbolName)\n' +
@@ -465,6 +484,65 @@ export default {
     '       if (arrMain[arrMain.length - 3] < arrSignal[arrSignal.length - 3] && arrMain[arrMain.length - 2] > arrSignal[arrSignal.length - 2]) {\n' +
     '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_BUYLIMIT, ask - limitPrice, 0, volume, ask + limitPrice, bid - 3 * stopPrice, "")\n' +
     '       } else if (arrMain[arrMain.length - 3] > arrSignal[arrSignal.length - 3] && arrMain[arrMain.length - 2] < arrSignal[arrSignal.length - 2]) {\n' +
+    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_SELLLIMIT, bid + limitPrice, 0, volume, bid - limitPrice, ask + 3 * stopPrice, "")\n' +
+    '       }\n' +
+    '    }\n' +
+    ')\n'
+            }
+
+            this.templateMap['4'] = {
+                featuredPic: '/images/template4.png',
+                sourceCode:
+    'registerEA(\n' +
+    '   "sample_using_[indicator]",\n' +
+    '   "A test EA based on [indicator]",\n' +
+        '[parameters]' +
+    '   function (context) { // Init()\n' +
+    '       var account = getAccount(context, 0)\n' +
+    '       var brokerName = [broker]\n' +
+    '       var accountId = [account]\n' +
+    '       var symbolName = [instrument]\n' +
+    '       getQuotes(context, brokerName, accountId, symbolName)\n' +
+    '       window.chartHandle = getChartHandle(context, brokerName, accountId, symbolName, [timeFrame])\n' +
+    '   },\n' +
+    '   function(context) { // Deinit()\n' +
+    '       delete window.currTime\n' +
+    '   },\n' +
+    '   function(context) { // OnTick()\n' +
+    '       var arrTime = getData(context, window.chartHandle, DATA_NAME.TIME)\n' +
+    '       if (typeof window.currTime == "undefined") {\n' +
+    '           window.currTime = arrTime[arrTime.length - 1]\n' +
+    '       } else if (window.currTime != arrTime[arrTime.length - 1]) {\n' +
+    '           window.currTime = arrTime[arrTime.length - 1]\n' +
+    '       } else {\n' +
+    '           return\n' +
+    '       }\n' +
+    '       var account = getAccount(context, 0)\n' +
+    '       var brokerName = [account]\n' +
+    '       var accountId = [account]\n' +
+    '       var symbolName = [instrument]\n' +
+            '[getParameters]' +
+    '       var arrClose = getData(context, window.chartHandle, DATA_NAME.CLOSE)\n' +
+    '       var arrOpen = getData(context, window.chartHandle, DATA_NAME.OPEN)\n' +
+    '       var ask = getAsk(context, brokerName, accountId, symbolName)\n' +
+    '       var bid = getBid(context, brokerName, accountId, symbolName)\n' +
+    '       var limitPrice = 0.0003\n' +
+    '       var stopPrice = 0.0003\n' +
+    '       var volume = 0.01\n' +
+    '       var buyOrSell = "neither"\n' +
+    '       for (var i = 1; i <= period; i++) {\n'
+    '           if (arrClose[arrClose.length - i] - arrOpen[arrOpen.length - i] > 0 && (buyOrSell == "buy" || i == 1)) {\n' +
+    '               buyOrSell = "buy"\n' +
+    '           } else if (arrClose[arrClose.length - i] - arrOpen[arrOpen.length - i] < 0 && (buyOrSell == "sell" || i == 1)) {\n' +
+    '               buyOrSell = "sell"\n' +
+    '           } else {\n' +
+    '               buyOrSell = "neither"\n' +
+    '               break\n' +
+    '           }\n' +
+    '       }\n' +
+    '       if (buyOrSell == "buy") {\n' +
+    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_BUYLIMIT, ask - limitPrice, 0, volume, ask + limitPrice, bid - 3 * stopPrice, "")\n' +
+    '       } else if (buyOrSell == "sell") {\n' +
     '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_SELLLIMIT, bid + limitPrice, 0, volume, bid - limitPrice, ask + 3 * stopPrice, "")\n' +
     '       }\n' +
     '    }\n' +
