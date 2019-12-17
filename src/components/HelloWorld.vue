@@ -530,7 +530,7 @@ export default {
     '       var stopPrice = 0.0003\n' +
     '       var volume = 0.01\n' +
     '       var buyOrSell = "neither"\n' +
-    '       for (var i = 1; i <= period; i++) {\n'
+    '       for (var i = 1; i <= period; i++) {\n' +
     '           if (arrClose[arrClose.length - i] - arrOpen[arrOpen.length - i] > 0 && (buyOrSell == "buy" || i == 1)) {\n' +
     '               buyOrSell = "buy"\n' +
     '           } else if (arrClose[arrClose.length - i] - arrOpen[arrOpen.length - i] < 0 && (buyOrSell == "sell" || i == 1)) {\n' +
