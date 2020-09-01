@@ -7,12 +7,21 @@
 
         <v-flex mb-4>
             <h1 class="display-2 font-weight-bold mb-3">
-                Welcome to Fintechee Algo Trading Generator
+                Welcome to NonMQL Expert Advisor Studio
             </h1>
+            <h3 class="font-weight-bold mb-3">
+                Powered by Fintechee
+            </h3>
             <p class="subheading font-weight-regular">
                 For help and collaboration with other Fintechee developers,
                 <br>please join our online
-                <a href="https://twitter.com/Fintechee1" target="_blank">Fintechee Twitter Community</a>
+                <a href="https://twitter.com/Fintechee1" target="_blank">Fintechee Twitter Community</a>.
+                <br>You can run Expert Advisor(EA) on our WEB Trader, a Forex trading platform
+                <a href="https://wwww.fintechee.com/web-trader/" target="_blank">Fintechee(the best Forex trading platform)</a>.
+                <br>Please refer to our tutorials to know more details
+                <a href="https://wwww.fintechee.com/tutorial-for-forex-trading/" target="_blank">Fintechee Tutorials</a>.
+                <br>Or check our SDK documents
+                <a href="https://wwww.fintechee.com/sdk-trading/" target="_blank">Fintechee SDK</a>.
             </p>
         </v-flex>
 
@@ -382,9 +391,9 @@ export default {
     '       var stopPrice = 0.0003\n' +
     '       var volume = 0.01\n' +
     '       if (arrClose[arrClose.length - 3] < arrIndi[arrIndi.length - 3] && arrClose[arrClose.length - 2] > arrIndi[arrIndi.length - 2]) {\n' +
-    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_BUYLIMIT, ask - limitPrice, 0, volume, ask + limitPrice, bid - 3 * stopPrice, "")\n' +
+    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_BUYLIMIT, ask - limitPrice, 0, volume, ask + limitPrice, bid - 3 * stopPrice, "", 0, 0)\n' +
     '       } else if (arrClose[arrClose.length - 3] > arrIndi[arrIndi.length - 3] && arrClose[arrClose.length - 2] < arrIndi[arrIndi.length - 2]) {\n' +
-    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_SELLLIMIT, bid + limitPrice, 0, volume, bid - limitPrice, ask + 3 * stopPrice, "")\n' +
+    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_SELLLIMIT, bid + limitPrice, 0, volume, bid - limitPrice, ask + 3 * stopPrice, "", 0, 0)\n' +
     '       }\n' +
     '    }\n' +
     ')\n'
@@ -432,9 +441,9 @@ export default {
     '       var stopPrice = 0.0003\n' +
     '       var volume = 0.01\n' +
     '       if (constantNum < arrIndi[arrIndi.length - 3] && constantNum > arrIndi[arrIndi.length - 2]) {\n' +
-    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_BUYLIMIT, ask - limitPrice, 0, volume, ask + limitPrice, bid - 3 * stopPrice, "")\n' +
+    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_BUYLIMIT, ask - limitPrice, 0, volume, ask + limitPrice, bid - 3 * stopPrice, "", 0, 0)\n' +
     '       } else if ((100 - constantNum) > arrIndi[arrIndi.length - 3] && (100 - constantNum) < arrIndi[arrIndi.length - 2]) {\n' +
-    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_SELLLIMIT, bid + limitPrice, 0, volume, bid - limitPrice, ask + 3 * stopPrice, "")\n' +
+    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_SELLLIMIT, bid + limitPrice, 0, volume, bid - limitPrice, ask + 3 * stopPrice, "", 0, 0)\n' +
     '       }\n' +
     '    }\n' +
     ')\n'
@@ -482,9 +491,9 @@ export default {
     '       var stopPrice = 0.0003\n' +
     '       var volume = 0.01\n' +
     '       if (arrMain[arrMain.length - 3] < arrSignal[arrSignal.length - 3] && arrMain[arrMain.length - 2] > arrSignal[arrSignal.length - 2]) {\n' +
-    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_BUYLIMIT, ask - limitPrice, 0, volume, ask + limitPrice, bid - 3 * stopPrice, "")\n' +
+    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_BUYLIMIT, ask - limitPrice, 0, volume, ask + limitPrice, bid - 3 * stopPrice, "", 0, 0)\n' +
     '       } else if (arrMain[arrMain.length - 3] > arrSignal[arrSignal.length - 3] && arrMain[arrMain.length - 2] < arrSignal[arrSignal.length - 2]) {\n' +
-    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_SELLLIMIT, bid + limitPrice, 0, volume, bid - limitPrice, ask + 3 * stopPrice, "")\n' +
+    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_SELLLIMIT, bid + limitPrice, 0, volume, bid - limitPrice, ask + 3 * stopPrice, "", 0, 0)\n' +
     '       }\n' +
     '    }\n' +
     ')\n'
@@ -541,9 +550,9 @@ export default {
     '           }\n' +
     '       }\n' +
     '       if (buyOrSell == "buy") {\n' +
-    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_BUYLIMIT, ask - limitPrice, 0, volume, ask + limitPrice, bid - 3 * stopPrice, "")\n' +
+    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_BUYLIMIT, ask - limitPrice, 0, volume, ask + limitPrice, bid - 3 * stopPrice, "", 0, 0)\n' +
     '       } else if (buyOrSell == "sell") {\n' +
-    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_SELLLIMIT, bid + limitPrice, 0, volume, bid - limitPrice, ask + 3 * stopPrice, "")\n' +
+    '           sendOrder(brokerName, accountId, symbolName, ORDER_TYPE.OP_SELLLIMIT, bid + limitPrice, 0, volume, bid - limitPrice, ask + 3 * stopPrice, "", 0, 0)\n' +
     '       }\n' +
     '    }\n' +
     ')\n'
