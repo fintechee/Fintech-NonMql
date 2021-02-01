@@ -1,7 +1,7 @@
 <template>
 <v-container style="background:white">
     <v-layout text-center wrap>
-        <v-flex xs12>
+        <!--<v-flex xs12>
             <v-img :src="require('../assets/newscreenshot1.png')" class="my-3" contain height="200"></v-img>
         </v-flex>
 
@@ -23,10 +23,11 @@
                 <br>Or check our SDK documents
                 <a href="https://wwww.fintechee.com/sdk-trading/" target="_blank">Fintechee SDK</a>.
             </p>
-        </v-flex>
+        </v-flex>-->
 
         <v-flex mb-5 xs12>
             <h2 class="headline font-weight-bold mb-3">Generate your algo trading source code in ONE minute!!</h2>
+            <a href="https://www.fintechee.com" target="_blank">Fintechee Trading Platform</a>
 
             <v-layout justify-center>
                 <v-card class="ma-5" min-width="400">
@@ -75,7 +76,7 @@
                 <editor v-model="sourceCode" @init="editorInit" lang="javascript" theme="chrome" width="1000" height="1000"></editor>
             </v-layout>
 
-            <h2 class="headline font-weight-bold mb-3">To be Continued!!</h2>
+            <!--<h2 class="headline font-weight-bold mb-3">To be Continued!!</h2>-->
         </v-flex>
 
     </v-layout>

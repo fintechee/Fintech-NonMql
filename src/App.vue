@@ -1,6 +1,6 @@
 <template>
 <v-app>
-    <v-app-bar app color="#FFFFFF" flat style="height:60px;border-bottom:1px solid #EEEEEE">
+    <!--<v-app-bar app color="#FFFFFF" flat style="height:60px;border-bottom:1px solid #EEEEEE">
         <div class="d-flex align-center">
             <v-img alt="Vuetify Logo" class="shrink mr-2" contain src="./assets/nonmql_logo.png" transition="scale-transition" width="40" />
         </div>
@@ -16,7 +16,7 @@
             </span>
             <v-icon style="font-size:12px">mdi-open-in-new</v-icon>
         </v-btn>
-    </v-app-bar>
+    </v-app-bar>-->
 
     <v-content>
         <HelloWorld />
@@ -24,7 +24,7 @@
 
     <v-footer padless>
         <v-col class="text-center" cols="12" style="font-size:12px">
-            © 2013 - 2021 — <strong>NON MQL</strong> Fintechee Expert Advisor Studio
+            © 2013 - 2021 — <strong>NON MQL</strong> <a href="https://www.fintechee.com">Fintechee Expert Advisor Studio</a>
         </v-col>
     </v-footer>
 </v-app>
