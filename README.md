@@ -1,5 +1,7 @@
 # NONMQL
 
+### This project will generate a static site. So, the security vulnerability alerts can be ignored!
+
 ## Project setup
 ```
 npm install
@@ -29,4 +31,3 @@ npm run lint
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
-### This project will generate a static site. So, the security vulnerability alerts can be ignored!
